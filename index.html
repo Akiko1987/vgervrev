@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מחולל האשכולות של צוות פיד</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 90%; /* Make it responsive to screen width */
+            text-align: center;
+            direction: rtl; /* Set the container text direction to RTL */
+        }
+
+        h1 {
+            color: #333;
+            font-size: 1.5em;
+        }
+
+        input[type="text"], textarea {
+            width: 100%; /* Make input and textarea full-width */
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            box-sizing: border-box; /* Ensure padding is included in width calculation */
+            direction: rtl; /* Set input text direction to RTL */
+        }
+
+        textarea {
+            height: 150px; /* Make the textarea larger for longer text */
+            resize: vertical; /* Allow vertical resizing */
+        }
+
+        button {
+            background-color: #3366cc; /* Set button color */
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%; /* Make the button full-width */
+        }
+
+        button:hover {
+            background-color: #2b5ba7; /* Darker shade on hover */
+        }
+
+        #toast {
+            visibility: hidden;
+            min-width: 250px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 5px;
+            padding: 16px;
+            position: fixed;
+            z-index: 1;
+            left: 50%;
+            bottom: 30px;
+            transform: translateX(-50%);
+        }
+
+        #toast.show {
+            visibility: visible;
+            animation: fadeInOut 2.5s ease-in-out;
+        }
+
+        @keyframes fadeInOut {
+            0% {bottom: 0; opacity: 0;}
+            20% {bottom: 30px; opacity: 1;}
+            80% {bottom: 30px; opacity: 1;}
+            100% {bottom: 0; opacity: 0;}
+        }
+
+        /* Make the layout mobile-responsive */
+        @media only screen and (max-width: 600px) {
+            h1 {
+                font-size: 1.2em;
+            }
+
+            input[type="text"], textarea {
+                font-size: 14px;
+            }
+
+            button {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>מחולל האשכולות של צוות פיד</h1>
+    <input type="text" id="forumBox" placeholder="שם הפורום" />
+    <textarea id="inputBox" placeholder="תוכן האשכול"></textarea>
+    <button onclick="replaceAndCopy()">צור והעתק ללוח</button>
+</div>
+
+<div id="toast">האשכול הועתק בהצלחה</div>
+
+<script>
+    function replaceAndCopy() {
+        // Input text from the text box and forum name field
+        const forumName = document.getElementById('forumBox').value;
+        const inputText = document.getElementById('inputBox').value;
+
+        // Template text with forum and content placeholders
+        const template = `[CENTER][FONT=tahoma][COLOR=#3366cc][B][IMG]https://i.imagesup.co/images2/e622f52f27ea6f54b5fcd26f93f7a1ee8a432910.png[/IMG]
+
+שלום לכל הגולשים של פורום ${forumName}![/B][/COLOR]
+
+${inputText}  
+
+[COLOR=#3366cc][B]בברכה, 
+צוות תוכן.[/B][/COLOR]
+[/FONT][/CENTER]`;
+
+        // Copy the resulting text to clipboard
+        navigator.clipboard.writeText(template).then(function() {
+            // Show the toast message
+            const toast = document.getElementById('toast');
+            toast.className = "show";
+
+            // Remove the 'show' class after 2.5 seconds
+            setTimeout(function() { toast.className = toast.className.replace("show", ""); }, 2500);
+        }).catch(function(err) {
+            console.error('Failed to copy: ', err);
+        });
+    }
+</script>
+
+</body>
+</html>
