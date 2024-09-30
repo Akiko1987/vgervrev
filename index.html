@@ -21,45 +21,46 @@
             padding: 20px;
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
             max-width: 400px;
-            width: 90%; /* Make it responsive to screen width */
+            width: 90%;
             text-align: center;
-            direction: rtl; /* Set the container text direction to RTL */
+            direction: rtl;
         }
 
         h1 {
             color: #333;
             font-size: 1.5em;
+            margin-top: 15px;
         }
 
         input[type="text"], textarea {
-            width: 100%; /* Make input and textarea full-width */
+            width: 100%;
             padding: 12px;
             margin-bottom: 15px;
             border-radius: 5px;
             border: 1px solid #ccc;
             font-size: 16px;
-            box-sizing: border-box; /* Ensure padding is included in width calculation */
-            direction: rtl; /* Set input text direction to RTL */
+            box-sizing: border-box;
+            direction: rtl;
         }
 
         textarea {
-            height: 150px; /* Make the textarea larger for longer text */
-            resize: vertical; /* Allow vertical resizing */
+            height: 150px;
+            resize: vertical;
         }
 
         button {
-            background-color: #3366cc; /* Set button color */
+            background-color: #3366cc;
             color: white;
             padding: 12px 20px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
-            width: 100%; /* Make the button full-width */
+            width: 100%;
         }
 
         button:hover {
-            background-color: #2b5ba7; /* Darker shade on hover */
+            background-color: #2b5ba7;
         }
 
         #toast {
@@ -82,6 +83,14 @@
             animation: fadeInOut 2.5s ease-in-out;
         }
 
+        #toast.error {
+            background-color: #cc3333;
+        }
+
+        #toast.success {
+            background-color: #333;
+        }
+
         @keyframes fadeInOut {
             0% {bottom: 0; opacity: 0;}
             20% {bottom: 30px; opacity: 1;}
@@ -89,7 +98,13 @@
             100% {bottom: 0; opacity: 0;}
         }
 
-        /* Make the layout mobile-responsive */
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+
         @media only screen and (max-width: 600px) {
             h1 {
                 font-size: 1.2em;
@@ -108,6 +123,8 @@
 <body>
 
 <div class="container">
+    <img src="https://i.imagesup.co/images2/e622f52f27ea6f54b5fcd26f93f7a1ee8a432910.png" alt="Forum Logo">
+    
     <h1>מחולל האשכולות של צוות פיד</h1>
     <input type="text" id="forumBox" placeholder="שם הפורום" />
     <textarea id="inputBox" placeholder="תוכן האשכול"></textarea>
@@ -118,11 +135,19 @@
 
 <script>
     function replaceAndCopy() {
-        // Input text from the text box and forum name field
         const forumName = document.getElementById('forumBox').value;
         const inputText = document.getElementById('inputBox').value;
+        const toast = document.getElementById('toast');
 
-        // Template text with forum and content placeholders
+        if (!forumName || !inputText) {
+            toast.textContent = "חובה למלא את כל השדות";
+            toast.className = "show error";
+            setTimeout(function() {
+                toast.className = toast.className.replace("show", "");
+            }, 2500);
+            return;
+        }
+
         const template = `[CENTER][FONT=tahoma][COLOR=#3366cc][B][IMG]https://i.imagesup.co/images2/e622f52f27ea6f54b5fcd26f93f7a1ee8a432910.png[/IMG]
 
 שלום לכל הגולשים של פורום ${forumName}![/B][/COLOR]
@@ -133,14 +158,12 @@ ${inputText}
 צוות תוכן.[/B][/COLOR]
 [/FONT][/CENTER]`;
 
-        // Copy the resulting text to clipboard
         navigator.clipboard.writeText(template).then(function() {
-            // Show the toast message
-            const toast = document.getElementById('toast');
-            toast.className = "show";
-
-            // Remove the 'show' class after 2.5 seconds
-            setTimeout(function() { toast.className = toast.className.replace("show", ""); }, 2500);
+            toast.textContent = "האשכול הועתק בהצלחה";
+            toast.className = "show success";
+            setTimeout(function() {
+                toast.className = toast.className.replace("show", "");
+            }, 2500);
         }).catch(function(err) {
             console.error('Failed to copy: ', err);
         });
